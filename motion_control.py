@@ -9,12 +9,12 @@ class motion_control(appapi.my_appapi):
                               "on_value":8,
                               "off_value":0,
                               "delay":300},
-                          "binary_sensor.den_sensor_sensor_13_0":
+                          "binary_sensor.den_sensor_sensor_14_0":
                              {"target":"input_boolean.denmotion",
                               "on_value":"on",
                               "off_value":"off",
                               "delay":300},
-                          "binary_sensor.aeotec_zw074_multisensor_gen5_sensor_14_0":
+                          "binary_sensor.upstairs_sensor_sensor_13_0":
                              {"target":"input_boolean.upstairsmotion",
                               "on_value":"on",
                               "off_value":"off",
