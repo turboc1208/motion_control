@@ -4,20 +4,40 @@ class motion_control(appapi.my_appapi):
 
   def initialize(self):
     # self.LOGLEVEL="DEBUG"
-    self.motion_devices= {"sensor.office_sensor_burglar_11_10":
+    self.motion_devices= {"sensor.office_sensor_burglar":
                              {"target":"input_boolean.officemotion",
                               "on_value":8,
                               "off_value":0,
                               "delay":300},
-                          "binary_sensor.den_sensor_sensor_14_0":
+                          "sensor.master_burglar":
+                             {"target":"input_boolean.mastermotion",
+                              "on_value":8,
+                              "off_value":0,
+                              "delay":300},
+                          "sensor.guest_sensor_burglar":
+                             {"target":"input_boolean.guestmotion",
+                              "on_value":8,
+                              "off_value":0,
+                              "delay":300},
+                          "sensor.downstairs_hallway_sensor_burglar":
+                             {"target":"input_boolean.dshallmotion",
+                              "on_value":8,
+                              "off_value":0,
+                              "delay":300},
+                          "sensor.den_sensor_burglar":
                              {"target":"input_boolean.denmotion",
+                              "on_value":8,
+                              "off_value":0,
+                              "delay":1800},
+                          "binary_sensor.media_room_sensor_sensor":
+                             {"target":"input_boolean.mediamotion",
                               "on_value":"on",
                               "off_value":"off",
                               "delay":300},
-                          "binary_sensor.upstairs_sensor_sensor_13_0":
+                          "sensor.upstairs_sensor_burglar":
                              {"target":"input_boolean.upstairsmotion",
-                              "on_value":"on",
-                              "off_value":"off",
+                              "on_value":8,
+                              "off_value":0,
                               "delay":300}}
   
     self.log("motion_control App")
