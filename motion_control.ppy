@@ -1,0 +1,42 @@
+import appdaemon.plugins.hass.hassapi as hass
+import datetime
+import time
+m4_include(/home/appdaemon/code/appdaemon/adlib_imports.pyi)
+
+class motion_control(hass.Hass):
+
+  def initialize(self):
+    # self.LOGLEVEL="DEBUG"
+    self.log("motion_devices={}".format(self.args["motion_devices"]))
+    self.motion_devices= eval(self.args["motion_devices"])
+  
+    self.log("motion_control App")
+    for s_motion in self.motion_devices:
+      self.log("setting state listener for {} with new = {}".format(s_motion,self.motion_devices[s_motion]["on_value"]))
+#      self.listen_state(self.motion_handler,s_motion,
+#                        new=self.motion_devices[s_motion]["on_value"])
+      self.listen_state(self.motion_handler,s_motion)
+      # listen for when new state is off for durration
+      self.log("Listening for {} to be in {} state for {} seconds".format(s_motion,self.motion_devices[s_motion]["off_value"],self.motion_devices[s_motion]["delay"]))
+      self.listen_state(self.motion_timeout,s_motion,
+                        new=self.motion_devices[s_motion]["off_value"],
+                        duration=self.motion_devices[s_motion]["delay"],
+                        immediate = True)
+      self.log("state listener immediate set")
+      
+    self.log("motion_control initialization complete")  
+    
+  def motion_handler(self,entity, attribute, old, new, kwargs):
+    self.log("Entity={}, new={}, old={}".format(entity,new,old))
+    if new!=old:
+      self.log("Motion happened - {} - {}".format(entity,new))
+      if str(new)==str(self.motion_devices[entity]["on_value"]):
+        self.turn_on(self.motion_devices[entity]["target"])
+
+  def motion_timeout(self,entity, attribute, old, new, kwargs):
+    self.log("timout occurred for {} - {}".format(entity,new))
+    if str(new)==str(self.motion_devices[entity]["off_value"]):
+      self.log("turning out light {}".format(self.motion_devices[entity]["target"]))
+      self.turn_off(self.motion_devices[entity]["target"])
+
+m4_include(/home/appdaemon/code/appdaemon/adlib.pyi)
