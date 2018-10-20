@@ -15,13 +15,14 @@ class motion_control(hass.Hass):
       self.log("setting state listener for {} with new = {}".format(s_motion,self.motion_devices[s_motion]["on_value"]))
 #      self.listen_state(self.motion_handler,s_motion,
 #                        new=self.motion_devices[s_motion]["on_value"])
-      self.listen_state(self.motion_handler,s_motion)
+      self.listen_state(self.motion_handler,s_motion,retry=10)
       # listen for when new state is off for durration
       self.log("Listening for {} to be in {} state for {} seconds".format(s_motion,self.motion_devices[s_motion]["off_value"],self.motion_devices[s_motion]["delay"]))
       self.listen_state(self.motion_timeout,s_motion,
                         new=self.motion_devices[s_motion]["off_value"],
                         duration=self.motion_devices[s_motion]["delay"],
-                        immediate = True)
+                        immediate = True,
+                        retry=10)
       self.log("state listener immediate set")
       
     self.log("motion_control initialization complete")  
