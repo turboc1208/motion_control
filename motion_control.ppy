@@ -13,23 +13,21 @@ class motion_control(hass.Hass):
     self.log("motion_control App")
     for s_motion in self.motion_devices:
       self.log("setting state listener for {} with new = {}".format(s_motion,self.motion_devices[s_motion]["on_value"]))
-#      self.listen_state(self.motion_handler,s_motion,
-#                        new=self.motion_devices[s_motion]["on_value"])
-      self.listen_state(self.motion_handler,s_motion,retry=10)
-      # listen for when new state is off for durration
+      h1=self.listen_state(self.motion_handler,s_motion)
       self.log("Listening for {} to be in {} state for {} seconds".format(s_motion,self.motion_devices[s_motion]["off_value"],self.motion_devices[s_motion]["delay"]))
-      self.listen_state(self.motion_timeout,s_motion,
-                        new=self.motion_devices[s_motion]["off_value"],
+      h2=self.listen_state(self.motion_timeout,s_motion,
+                        new=self.motion_devices[s_motion]["off_value"] if isinstance(self.motion_devices[s_motion]["off_value"],str) else str(self.motion_devices[s_motion]["off_value"]),
                         duration=self.motion_devices[s_motion]["delay"],
-                        immediate = True,
-                        retry=10)
+                        immediate = True)
+      self.log("Listening for {} to be in {} state for {} seconds".format(s_motion,self.motion_devices[s_motion]["off_value"],self.motion_devices[s_motion]["delay"]))
       self.log("state listener immediate set")
+      self.log("current_state={}".format(self.get_state(s_motion,attribute="all")))
       
     self.log("motion_control initialization complete")  
     
   def motion_handler(self,entity, attribute, old, new, kwargs):
     self.log("Entity={}, new={}, old={}".format(entity,new,old))
-    if new!=old:
+    if not new == old:
       self.log("Motion happened - {} - {}".format(entity,new))
       if str(new)==str(self.motion_devices[entity]["on_value"]):
         self.turn_on(self.motion_devices[entity]["target"])
