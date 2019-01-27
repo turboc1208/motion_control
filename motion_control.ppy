@@ -17,7 +17,7 @@ class motion_control(hass.Hass):
       self.log("Listening for {} to be in {} state for {} seconds".format(s_motion,self.motion_devices[s_motion]["off_value"],self.motion_devices[s_motion]["delay"]))
       h2=self.listen_state(self.motion_timeout,s_motion,
                         new=self.motion_devices[s_motion]["off_value"] if isinstance(self.motion_devices[s_motion]["off_value"],str) else str(self.motion_devices[s_motion]["off_value"]),
-                        duration=self.motion_devices[s_motion]["delay"],
+                        duration=int(self.motion_devices[s_motion]["delay"]),
                         immediate = True)
       self.log("Listening for {} to be in {} state for {} seconds".format(s_motion,self.motion_devices[s_motion]["off_value"],self.motion_devices[s_motion]["delay"]))
       self.log("state listener immediate set")
